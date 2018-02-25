@@ -10,5 +10,5 @@ def log(message, name):
     if not os.path.exists(dr):
         os.makedirs(dr)
     stamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M')
-    with open(dir + '/' + name, 'a') as f:
+    with open(dr + '/' + name, 'a') as f:
         f.write(stamp + ' - ' + message + '\n')
