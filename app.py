@@ -1,12 +1,15 @@
 from threading import Thread
 from bokeh.embed import server_document
-from bokeh.server.server import Server
 
-from reports import modifyDoc
+from reports import sensorInit, sensorLoop, bokehLoop
 from log import log
 
 from flask import render_template, Flask, request
 app = Flask(__name__)
+
+
+# Do no modify
+sensorArray = []
 
 
 @app.route('/')
@@ -32,17 +35,11 @@ def input_post():
     return render_template('input.html')
 
 
-def bk_worker():
-    server = Server({'/reports': modifyDoc},
-                    allow_websocket_origin=["localhost:8000"])
-    server.start()
-    server.io_loop.start()
-
-
-Thread(target=bk_worker).start()
-
-
 if __name__ == '__main__':
     print('Flask on http://localhost:8000/')
     print()
+    sensorInit(sensorArray)
+    Thread(target=sensorLoop, args=(sensorArray,)).start()
+
+    Thread(target=bokehLoop).start()
     app.run(port=8000)

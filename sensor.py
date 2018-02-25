@@ -35,7 +35,7 @@ class Sensor:
         self.unit = unit
         self.index = index
         self.datum = initialVal
-        self.lastLog = time.time()
+        self.lastLog = time.time() - 60
         self.adjust = adjust
 
         # Plot Config
@@ -68,4 +68,5 @@ class Sensor:
 
     def logData(self):
         if time.time() - self.lastLog > 59:
-            log(self.datum, self.name + '.log')
+            self.lastLog = time.time()
+            log(str(self.datum), self.name + ".log")
