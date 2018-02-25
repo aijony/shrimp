@@ -29,13 +29,16 @@ except:
 
 
 class Sensor:
-    def __init__(self, name, unit, index, calibrate=0, color="mediumseagreen"):
+    def __init__(self, name, unit, index, adjust=lambda x: x,
+               color="mediumseagreen", initialVal=0):
         self.name = name
         self.unit = unit
         self.index = index
-        self.datum = calibrate
+        self.datum = initialVal
         self.lastLog = time.time()
+        self.adjust = adjust
 
+        # Plot Config
         self.plot = figure(plot_width=800, plot_height=400,
                            title=name)
         self.plot.x_range.follow = "end"
@@ -47,10 +50,11 @@ class Sensor:
         self.ds = r.data_source
 
     def getData(self):
-        if self.index < 0 or mcpFlag is False:
+        if self.index < 0:
             self.datum = self.spoofData()
         else:
-            self.datum = mcp.read_adc(self.index) * self.calibrate
+            self.datum = (mcp.read_adc(self.index))
+        self.datum = self.adjust(self.datum)
         self.logData()
         return self.datum
 
@@ -60,7 +64,7 @@ class Sensor:
         self.ds.trigger('data', self.ds.data, self.ds.data)
 
     def spoofData(self):
-        return self.datum + random.uniform(.1, -.1)
+        return self.datum + random.uniform(.1, -.1) - 10
 
     def logData(self):
         if time.time() - self.lastLog > 59:
