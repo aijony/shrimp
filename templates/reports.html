@@ -1,0 +1,18 @@
+<!doctype html>
+
+{% extends "layouts.html" %}
+{% block title %}Reports{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+   <div>
+       Currently mock data:
+   </div>
+  {{ script|safe }}
+{% endblock %}
+
+

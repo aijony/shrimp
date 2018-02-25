@@ -1,0 +1,19 @@
+<!doctype html>
+{% extends "layouts.html" %}
+{% block title %}Input{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <div>Input</div>
+  <form method="POST">
+      Enter Message:<br>
+      <input type=:text" name="text">
+      <input type="submit" name="submit">
+  </form> 
+
+
+{% endblock %}
