@@ -1,5 +1,7 @@
 # Module: sensor.py
 import random
+import time
+from log import log
 
 from bokeh.plotting import figure
 
@@ -8,7 +10,7 @@ class Sensor:
     def __init__(self, name, unit, calibrate=0, color="mediumspringgreen"):
         self.name = name
         self.unit = unit
-        self.calibrate = calibrate
+        self.datum = calibrate
         self.plot = figure(plot_width=800, plot_height=400,
                            title=name)
         self.plot.x_range.follow = "end"
@@ -18,10 +20,12 @@ class Sensor:
         self.plot.xaxis.axis_label = "steps"
         r = self.plot.line([], [], color=color, line_width=2)
         self.ds = r.data_source
+        self.lastLog = time.time()
 
     def getData(self):
-        self.calibrate = self.spoofData()
-        return self.calibrate
+        self.datum = self.spoofData()
+        self.logData()
+        return self.datum
 
     def updatePlot(self, step):
         self.ds.data['x'].append(step)
@@ -29,6 +33,8 @@ class Sensor:
         self.ds.trigger('data', self.ds.data, self.ds.data)
 
     def spoofData(self):
-        return self.calibrate + random.uniform(.1, -.1)
+        return self.datum + random.uniform(.1, -.1)
 
-#  LocalWords:  mediumspringgreen
+    def logData(self):
+        if time.time() - self.lastLog > 59:
+            log(self.datum, self.name + '.log')
