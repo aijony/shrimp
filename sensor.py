@@ -64,7 +64,7 @@ class Sensor:
         self.ds.trigger('data', self.ds.data, self.ds.data)
 
     def spoofData(self):
-        return self.datum + random.uniform(.1, -.1) - 10
+        return self.datum + random.uniform(.1, -.1)
 
     def logData(self):
         if time.time() - self.lastLog > 59:
