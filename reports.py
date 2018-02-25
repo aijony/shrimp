@@ -9,7 +9,7 @@ oxygen = 6.34
 
 def modifyDoc(doc):
     sensorArray = []
-    sensorArray.append(s.Sensor("Oxygen", "mg/l", 6.34, "red"))
+    sensorArray.append(s.Sensor("Oxygen", "mg/l", -1, 6.34, "red"))
 
     @linear()
     def update(step):
