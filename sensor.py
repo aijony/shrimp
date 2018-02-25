@@ -5,12 +5,37 @@ from log import log
 
 from bokeh.plotting import figure
 
+# Import SPI library (for hardware SPI) and MCP3008 library.
+import Adafruit_GPIO.SPI as SPI
+import Adafruit_MCP3008
+
+# Software SPI configuration:
+CLK = 18
+MISO = 23
+MOSI = 24
+CS = 25
+mcpFlag = False
+
+try:
+    mcp = Adafruit_MCP3008.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
+    mcpFlag = True
+except:
+    print("mcp not configured correctly")
+
+# Hardware SPI configuration:
+# SPI_PORT   = 0
+# SPI_DEVICE = 0
+# mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
+
 
 class Sensor:
-    def __init__(self, name, unit, calibrate=0, color="mediumspringgreen"):
+    def __init__(self, name, unit, index, calibrate=0, color="mediumseagreen"):
         self.name = name
         self.unit = unit
+        self.index = index
         self.datum = calibrate
+        self.lastLog = time.time()
+
         self.plot = figure(plot_width=800, plot_height=400,
                            title=name)
         self.plot.x_range.follow = "end"
@@ -20,10 +45,12 @@ class Sensor:
         self.plot.xaxis.axis_label = "steps"
         r = self.plot.line([], [], color=color, line_width=2)
         self.ds = r.data_source
-        self.lastLog = time.time()
 
     def getData(self):
-        self.datum = self.spoofData()
+        if self.index < 0 or mcpFlag is False:
+            self.datum = self.spoofData()
+        else:
+            self.datum = mcp.read_adc(self.index) * self.calibrate
         self.logData()
         return self.datum
 
