@@ -5,6 +5,8 @@ import time
 
 
 def log(message, name):
+    """Currently just logs the messages and text
+       with a date file in text format."""
     dr = 'cache'
     ts = time.time()
     if not os.path.exists(dr):
