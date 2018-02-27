@@ -9,8 +9,8 @@ import sensor as s
 def sensorInit(sensorArray):
     sensorArray.append(s.Sensor("Oxygen", "mg/l", -1,
                                 lambda x: x, "red", 6.67))
-    sensorArray.append(s.Sensor("Oxygen", "mg/l", -1,
-                                lambda x: x + 10, "red", 6.67))
+    sensorArray.append(s.Sensor("Nitrogen", "mg/l", -1,
+                                lambda x: x, "blue", 29.67))
 
 
 def sensorLoop(sensorArray):
@@ -31,7 +31,7 @@ def modifyDoc(doc):
     for sensor in sensorArray:
         doc.add_root(column(sensor.plot))
 
-    doc.add_periodic_callback(update, 100)
+    doc.add_periodic_callback(update, 500)
 
 
 def bokehLoop():
