@@ -1,6 +1,4 @@
 Flask==0.12.2
 bokeh==0.12.14
-Adafruit-GPIO==0.6.5
-Adafruit-GPIO
-Adafruit-MCP3008
-
+Adafruit-GPIO==1.0.3
+Adafruit-MCP3008==1.0.2
