@@ -6,6 +6,8 @@ Requirements (see requirements.txt):
   Flask
   Bokeh
   mcp
+  Adafruit-GPIO
+  Adafruit-MCP3008
 
 Run:
   python app.py
